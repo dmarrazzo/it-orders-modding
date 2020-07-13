@@ -36,11 +36,21 @@ public class Script {
 
     public static void ruleOnExit(ProcessContext kcontext) {
         List<ApproverInfo> aplist =  (List<ApproverInfo>) kcontext.getVariable("caseFile_approvalList");
+
         kcontext.setVariable("caseFile_approvalCount", aplist.size());
+
+        StringBuffer approvers = null;
+
         for (ApproverInfo approverInfo : aplist) {
-            kcontext.getCaseAssignment().assignUser("manager", approverInfo.getName());
+            if (approvers == null) {
+                approvers = new StringBuffer(approverInfo.getName());
+            } else {
+                approvers.append(", ");
+                approvers.append(approverInfo.getName());
+            }
         }
-        kcontext.getCaseAssignment().assignUser("manager", "donato");
+
+        kcontext.getCaseAssignment().assignUser("manager", approvers.toString());
     }
 
 }

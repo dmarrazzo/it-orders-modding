@@ -18,7 +18,9 @@ public class Script {
                 approvers.append(",");
             approvers.append(approverInfo.getName());
         }
-        
-        System.out.println("approvers:" + approvers);
+
+        kcontext.setVariable("approver", approvers);
+
+        System.out.println("proc var -> approver: " + approvers);
     }
 }

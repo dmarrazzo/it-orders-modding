@@ -9,7 +9,7 @@ public class Script {
 
     public static void mgrApprovalOnEntry(ProcessContext kcontext) {
         Integer cnt = (Integer) kcontext.getVariable("count");
-        java.util.List aplist = (java.util.List) kcontext.getVariable("caseFile_approvalList");
+        List<ApproverInfo> aplist = (List<ApproverInfo>) kcontext.getVariable("caseFile_approvalList");
         if (cnt == null) {
             cnt = new Integer(1);
             kcontext.setVariable("count", cnt);
@@ -39,18 +39,9 @@ public class Script {
 
         kcontext.setVariable("caseFile_approvalCount", aplist.size());
 
-        StringBuffer approvers = null;
-
-        for (ApproverInfo approverInfo : aplist) {
-            if (approvers == null) {
-                approvers = new StringBuffer(approverInfo.getName());
-            } else {
-                approvers.append(", ");
-                approvers.append(approverInfo.getName());
-            }
-        }
-
-        kcontext.getCaseAssignment().assignUser("manager", approvers.toString());
+        aplist.stream().forEach(approverInfo -> {
+            kcontext.getCaseAssignment().assignUser("manager", approverInfo.getName());
+        });
     }
 
 }
